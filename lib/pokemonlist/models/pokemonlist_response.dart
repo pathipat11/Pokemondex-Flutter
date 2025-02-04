@@ -20,6 +20,21 @@ class PokemonListResponse {
           json['results'].map((x) => PokemonListItem.fromJson(x))),
     );
   }
+
+  // เพิ่มฟังก์ชัน copyWith
+  PokemonListResponse copyWith({
+    int? count,
+    String? next,
+    String? previous,
+    List<PokemonListItem>? results,
+  }) {
+    return PokemonListResponse(
+      count: count ?? this.count,
+      next: next ?? this.next,
+      previous: previous ?? this.previous,
+      results: results ?? this.results,
+    );
+  }
 }
 
 class PokemonListItem {
@@ -30,6 +45,11 @@ class PokemonListItem {
     required this.name,
     required this.url,
   });
+
+  String get imageUrl {
+    final id = url.split('/')[6];
+    return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
+  }
 
   factory PokemonListItem.fromJson(Map<String, dynamic> json) {
     return PokemonListItem(
