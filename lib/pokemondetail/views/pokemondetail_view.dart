@@ -72,27 +72,38 @@ class _PokemondetailViewState extends State<PokemondetailView> {
     }
   }
 
-  Widget _buildStatRow(String label, int value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(value.toString()),
-        ],
-      ),
-    );
-  }
+  Widget _buildStatRow(String label, int value, int maxValue) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(value.toString()),
+          ],
+        ),
+        const SizedBox(height: 8),
+        LinearProgressIndicator(
+          value: value / maxValue,
+          backgroundColor: Colors.grey.shade300,
+          valueColor: AlwaysStoppedAnimation<Color>(getTypeColor(label.toLowerCase())),
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.pokemonListItem.name.toUpperCase(),  
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+          widget.pokemonListItem.name.toUpperCase(),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: getTypeColor(widget.pokemonListItem.types.first),
@@ -133,13 +144,11 @@ class _PokemondetailViewState extends State<PokemondetailView> {
                               spacing: 8.0,
                               children: (pokemonData!['types'] as List)
                                   .map((typeInfo) {
-                                    final typeName =
-                                        typeInfo['type']['name'];
+                                    final typeName = typeInfo['type']['name'];
                                     return Chip(
                                       label: Text(
                                         typeName.toUpperCase(),
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                        style: const TextStyle(color: Colors.white),
                                       ),
                                       backgroundColor: getTypeColor(typeName),
                                     );
@@ -170,6 +179,7 @@ class _PokemondetailViewState extends State<PokemondetailView> {
                                 .map((stat) => _buildStatRow(
                                       stat['stat']['name'],
                                       stat['base_stat'],
+                                      100,
                                     ))),
                           ],
                         ),

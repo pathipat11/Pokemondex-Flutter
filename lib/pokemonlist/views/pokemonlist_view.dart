@@ -141,74 +141,77 @@ class _PokemonListState extends State<PokemonList> {
           ),
           Expanded(
             child: _data == null
-                ? const Center(child: CircularProgressIndicator())
-                : GridView.builder(
-                    padding: const EdgeInsets.all(8.0),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 8.0,
-                      crossAxisSpacing: 8.0,
-                      childAspectRatio: 3 / 4,
+            ? const Center(child: CircularProgressIndicator())
+            : GridView.builder(
+              padding: const EdgeInsets.all(8.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 8.0,
+                crossAxisSpacing: 8.0,
+                childAspectRatio: 3.5 / 4,
+              ),
+              itemCount: _filteredResults.length,
+              itemBuilder: (context, index) {
+                final pokemon = _filteredResults[index];
+                // Display all types for each Pokémon
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            PokemondetailView(pokemonListItem: pokemon),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    color: getTypeColor(pokemon.types.first), // Color based on the first type
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    itemCount: _filteredResults.length,
-                    itemBuilder: (context, index) {
-                      final pokemon = _filteredResults[index];
-                      final primaryType =
-                          pokemon.types.isNotEmpty ? pokemon.types.first : 'normal';
-                      final typeColor = getTypeColor(primaryType);
-
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PokemondetailView(pokemonListItem: pokemon),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          color: typeColor,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            pokemon.imageUrl,
+                            height: 150,
+                            width: 150,
+                            fit: BoxFit.cover,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.network(
-                                  pokemon.imageUrl,
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  pokemon.name.toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  primaryType.toUpperCase(),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
+                          const SizedBox(height: 10),
+                          Text(
+                            pokemon.name.toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
                             ),
                           ),
-                        ),
-                      );
-                    },
+                          const SizedBox(height: 15),
+                          // Show all types of the Pokémon
+                          Wrap(
+                            spacing: 8.0,
+                            children: pokemon.types.map((type) {
+                              return Chip(
+                                label: Text(
+                                  type.toUpperCase(),
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                backgroundColor: getTypeColor(type),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -218,7 +221,7 @@ class _PokemonListState extends State<PokemonList> {
               child: const Icon(Icons.add),
               backgroundColor: Colors.red[900],
             )
-          : null,
+          : null, 
     );
   }
 }

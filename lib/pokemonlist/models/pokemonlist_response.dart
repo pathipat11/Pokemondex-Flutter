@@ -50,8 +50,9 @@ class PokemonListItem {
   });
 
   String get imageUrl {
+    // แปลง URL ให้ดึงภาพ PNG ที่มีความละเอียดสูง
     final id = url.split('/')[6];
-    return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png';
+    return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png';
   }
 
   factory PokemonListItem.fromJson(Map<String, dynamic> json) {
