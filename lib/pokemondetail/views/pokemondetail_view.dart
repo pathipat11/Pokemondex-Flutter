@@ -89,8 +89,13 @@ class _PokemondetailViewState extends State<PokemondetailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.pokemonListItem.name.toUpperCase()),
-        backgroundColor: Colors.purple,
+        title: Text(
+          widget.pokemonListItem.name.toUpperCase(),  
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: getTypeColor(widget.pokemonListItem.types.first),
         foregroundColor: Colors.white,
       ),
       body: pokemonData == null

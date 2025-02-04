@@ -13,9 +13,16 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('My Pokemon App'),
-          backgroundColor: Colors.purple,
-          foregroundColor: Colors.white,
+          title: Center(
+            child: const Text(
+              'My Pokemon App',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          backgroundColor: Colors.red[900],
+          foregroundColor: Colors.grey.shade100,
         ),
         body: const PokemonList(),
       ),

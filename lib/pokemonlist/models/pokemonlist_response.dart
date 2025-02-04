@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class PokemonListResponse {
   final int count;
   final String? next;
@@ -21,7 +23,6 @@ class PokemonListResponse {
     );
   }
 
-  // เพิ่มฟังก์ชัน copyWith
   PokemonListResponse copyWith({
     int? count,
     String? next,
@@ -40,10 +41,12 @@ class PokemonListResponse {
 class PokemonListItem {
   final String name;
   final String url;
+  List<String> types;
 
   PokemonListItem({
     required this.name,
     required this.url,
+    this.types = const [],
   });
 
   String get imageUrl {
@@ -55,6 +58,19 @@ class PokemonListItem {
     return PokemonListItem(
       name: json['name'],
       url: json['url'],
+      types: [],
     );
+  }
+  
+  get http => null;
+
+  Future<void> fetchTypes() async {
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      this.types = (data['types'] as List)
+          .map((typeInfo) => typeInfo['type']['name'] as String)
+          .toList();
+    }
   }
 }
